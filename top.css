@@ -28,7 +28,7 @@
                     }
 
 .result { color: mediumorchid ;
-          font-size: 16px ;
+          display: inline-block;
           text-align: center}
 
 .sns { color: dimgray ;
