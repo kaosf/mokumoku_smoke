@@ -1,6 +1,4 @@
-// your-javascript-file.js
 
-// flavors_data.json, tags_data.json, blocklist.jsonはリポジトリ内にアップロード済みと仮定
 fetch('flavors_data.json')
   .then(response => response.json())
   .then(flavorsData => {
@@ -20,7 +18,7 @@ fetch('flavors_data.json')
     }
 
     const resultsContainer = document.querySelector('.results');
-    resultsContainer.innerHTML = ''; // 一度結果をクリア
+    resultsContainer.innerHTML = ''; 
 
     uniqueResults.forEach(result => {
       const resultArray = result.split(',');
@@ -60,4 +58,27 @@ function checkExclusion(tag, blocklist) {
     }
   }
   return false;
+}
+
+  function mixFlavors() {
+    const numDraw = 4; 
+    const uniqueResults = new Set();
+
+    while (uniqueResults.size < numDraw) {
+        const selectedFlavor = [...flavors].sort(() => Math.random() - 0.5).slice(0, 3);
+
+        if (!checkExclusion(selectedFlavor, blocklist)) {
+            uniqueResults.add(selectedFlavor.toString());
+        }
+    }
+
+    const resultsContainer = document.querySelector('.results');
+    resultsContainer.innerHTML = ''; 
+
+    uniqueResults.forEach(result => {
+        const resultArray = result.split(',');
+        const resultElement = document.createElement('div');
+        resultElement.textContent = resultArray.join(', ');
+        resultsContainer.appendChild(resultElement);
+    });
 }
