@@ -11,21 +11,22 @@ Promise.all([
   .then(([flavorsData, blocklistData]) => {
     flavors = loadFlavors(flavorsData);
     tags = loadTags(flavorsData);
-    blocklist = loadBlocklist(blocklistData);
+    blocklist = blocklistData;
 
     const numDraw = 4;
     const uniqueResults = new Set();
 
     while (uniqueResults.size < numDraw) {
-      const selectedFlavor = [...flavors].sort(() => Math.random() - 0.5).slice(0, 3);
+      const selectedFlavor = getRandomElements(flavors, 3);
+      const selectedTags = selectedFlavor.flatMap(flavor => flavor.tag);
 
-      if (!checkExclusion(selectedFlavor, blocklist)) {
-        uniqueResults.add(selectedFlavor.toString());
+      if (!checkExclusion(selectedTags, blocklist)) {
+        uniqueResults.add(selectedFlavor.map(flavor => flavor.name).toString());
       }
     }
 
     const resultsContainer = document.querySelector('.results');
-    resultsContainer.innerHTML = ''; 
+    resultsContainer.innerHTML = '';
 
     uniqueResults.forEach(result => {
       const resultArray = result.split(',');
@@ -36,31 +37,27 @@ Promise.all([
   });
 
 function loadFlavors(flavorsData) {
-  const flavorsList = flavorsData.map(flavor => flavor.name);
-  return flavorsList;
+  return flavorsData;
 }
 
 function loadTags(flavorsData) {
-  const tagList = [];
+  const tagSet = new Set();
   flavorsData.forEach(flavorData => {
-    tagList.push(...flavorData.tag);
+    tagSet.add(...flavorData.tag);
   });
-  return tagList;
+  return Array.from(tagSet);
 }
 
-function loadBlocklist(flavorsData) {
-  const blocklist = {};
-  flavorsData.forEach(flavorData => {
-    blocklist[flavorData.name] = flavorData.block;
-  });
-  return blocklist;
+function getRandomElements(arr, count) {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
 }
 
-function checkExclusion(tag, blocklist) {
-  for (const flavorTag of tag) {
+function checkExclusion(tags, blocklist) {
+  for (const flavorTag of tags) {
     if (blocklist.hasOwnProperty(flavorTag)) {
       const blockedTags = blocklist[flavorTag];
-      if (blockedTags.some(blockedTag => tag.includes(blockedTag))) {
+      if (blockedTags.some(blockedTag => tags.includes(blockedTag))) {
         return true;
       }
     }
@@ -68,29 +65,30 @@ function checkExclusion(tag, blocklist) {
   return false;
 }
 
-  function mixFlavors() {
-    if (!flavors || !tags || !blocklist) {
-      console.log("Data not loaded yet.");
-      return;
+function mixFlavors() {
+  if (!flavors || !tags || !blocklist) {
+    console.log("Data not loaded yet.");
+    return;
+  }
+  const numDraw = 4; 
+  const uniqueResults = new Set();
+
+  while (uniqueResults.size < numDraw) {
+    const selectedFlavor = getRandomElements(flavors, 3);
+    const selectedTags = selectedFlavor.flatMap(flavor => flavor.tag);
+
+    if (!checkExclusion(selectedTags, blocklist)) {
+      uniqueResults.add(selectedFlavor.map(flavor => flavor.name).toString());
     }
-    const numDraw = 4; 
-    const uniqueResults = new Set();
+  }
 
-    while (uniqueResults.size < numDraw) {
-        const selectedFlavor = [...flavors].sort(() => Math.random() - 0.5).slice(0, 3);
+  const resultsContainer = document.querySelector('.results');
+  resultsContainer.innerHTML = ''; 
 
-        if (!checkExclusion(selectedFlavor, blocklist)) {
-            uniqueResults.add(selectedFlavor.toString());
-        }
-    }
-
-    const resultsContainer = document.querySelector('.results');
-    resultsContainer.innerHTML = ''; 
-
-    uniqueResults.forEach(result => {
-        const resultArray = result.split(',');
-        const resultElement = document.createElement('div');
-        resultElement.textContent = resultArray.join(', ');
-        resultsContainer.appendChild(resultElement);
-    });
+  uniqueResults.forEach(result => {
+    const resultArray = result.split(',');
+    const resultElement = document.createElement('div');
+    resultElement.textContent = resultArray.join(', ');
+    resultsContainer.appendChild(resultElement);
+  });
 }
