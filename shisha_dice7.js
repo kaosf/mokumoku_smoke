@@ -66,6 +66,10 @@ function checkExclusion(tag, blocklist) {
 }
 
   function mixFlavors() {
+    if (!flavors || !tags || !blocklist) {
+      console.log("Data not loaded yet.");
+      return;
+    }
     const numDraw = 4; 
     const uniqueResults = new Set();
 
