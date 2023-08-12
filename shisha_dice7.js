@@ -1,4 +1,6 @@
 let flavors;
+let tags;
+let blocklist;
 
 document.querySelector('.btn').addEventListener('click', mixFlavors);
 
@@ -6,8 +8,8 @@ fetch('shisha_data.json')
   .then(response => response.json())
   .then(flavorsData => {
     flavors = loadFlavors(flavorsData);
-    const tags = loadTags(flavorsData);
-    const blocklist = loadBlocklist(flavorsData);
+    tags = loadTags(flavorsData);
+    blocklist = loadBlocklist(flavorsData);
 
     const numDraw = 4;
     const uniqueResults = new Set();
