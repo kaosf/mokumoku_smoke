@@ -1,4 +1,4 @@
-fetch('flavors_data.json')
+fetch('shisha_data.json')
   .then(response => response.json())
   .then(flavorsData => {
     const flavors = loadFlavors(flavorsData);
