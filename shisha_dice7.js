@@ -1,7 +1,9 @@
+let flavors;
+
 fetch('shisha_data.json')
   .then(response => response.json())
   .then(flavorsData => {
-    const flavors = loadFlavors(flavorsData);
+    flavors = loadFlavors(flavorsData);
     const tags = loadTags(flavorsData);
     const blocklist = loadBlocklist(flavorsData);
 
