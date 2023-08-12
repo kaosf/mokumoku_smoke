@@ -2,8 +2,6 @@ let flavors;
 let tags;
 let blocklist;
 
-document.querySelector('.btn').addEventListener('click', mixFlavors);
-
 Promise.all([
   fetch('shisha_data.json').then(response => response.json()),
   fetch('blocklist.json').then(response => response.json())
