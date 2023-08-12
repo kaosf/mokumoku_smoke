@@ -48,6 +48,14 @@ function loadTags(flavorsData) {
   return Array.from(tagSet);
 }
 
+function loadBlocklist(flavorsData) {
+  const blocklist = {};
+  for (const flavorData of flavorsData) {
+    blocklist[flavorData.name] = flavorData.tag;
+  }
+  return blocklist;
+}
+
 function getRandomElements(arr, count) {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
