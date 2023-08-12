@@ -59,7 +59,8 @@ function loadBlocklist(flavorsData) {
 function checkExclusion(tag, blocklist) {
   for (const flavorTag of tag) {
     if (blocklist.hasOwnProperty(flavorTag)) {
-      if (new Set(tag).has(blocklist[flavorTag])) {
+      const blockedTags = blocklist[flavorTag];
+      if (blockedTags.some(blockedTag => tag.includes(blockedTag))) {
         return true;
       }
     }
