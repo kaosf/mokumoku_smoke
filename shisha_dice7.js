@@ -4,12 +4,14 @@ let blocklist;
 
 document.querySelector('.btn').addEventListener('click', mixFlavors);
 
-fetch('shisha_data.json')
-  .then(response => response.json())
-  .then(flavorsData => {
+Promise.all([
+  fetch('shisha_data.json').then(response => response.json()),
+  fetch('blocklist.json').then(response => response.json())
+])
+  .then(([flavorsData, blocklistData]) => {
     flavors = loadFlavors(flavorsData);
     tags = loadTags(flavorsData);
-    blocklist = loadBlocklist(flavorsData);
+    blocklist = loadBlocklist(blocklistData);
 
     const numDraw = 4;
     const uniqueResults = new Set();
