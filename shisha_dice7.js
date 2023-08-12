@@ -9,9 +9,9 @@ Promise.all([
   fetch('blocklist.json').then(response => response.json())
 ])
   .then(([flavorsData, blocklistData]) => {
-    flavors = loadFlavors(flavorsData);
+    flavors = flavorsData;
     tags = loadTags(flavorsData);
-    blocklist = blocklistData;
+    blocklist = loadBlocklist(blocklistData);
 
     const numDraw = 4;
     const uniqueResults = new Set();
@@ -36,10 +36,6 @@ Promise.all([
     });
   });
 
-function loadFlavors(flavorsData) {
-  return flavorsData;
-}
-
 function loadTags(flavorsData) {
   const tagSet = new Set();
   flavorsData.forEach(flavorData => {
@@ -48,11 +44,11 @@ function loadTags(flavorsData) {
   return Array.from(tagSet);
 }
 
-function loadBlocklist(flavorsData) {
+function loadBlocklist(blocklistData) {
   const blocklist = {};
-  for (const flavorData of flavorsData) {
-    blocklist[flavorData.name] = flavorData.tag;
-  }
+  Object.keys(blocklistData).forEach(flavorName => {
+    blocklist[flavorName] = blocklistData[flavorName];
+  });
   return blocklist;
 }
 
