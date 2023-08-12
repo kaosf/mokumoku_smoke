@@ -1,5 +1,7 @@
 let flavors;
 
+document.querySelector('.btn').addEventListener('click', mixFlavors);
+
 fetch('shisha_data.json')
   .then(response => response.json())
   .then(flavorsData => {
